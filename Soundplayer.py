@@ -27,11 +27,66 @@ def calc_distance(x,y):
 			arr[i]=0
 	return arr
 
+
+aarr = [0,0,0,0,0]
+barr = [0,0,0,0,0]
+carr = [0,0,0,0,0]
+
+
+def calc_volumes2(a,b,c):
+  
+	maxdist=5
+	#max(max(a,b),c
+	
+	aarr = aarr[1:] + a
+	barr = barr[1:] + b
+	carr = carr[1:] + c
+	
+	a = sum(aarr)/len(aarr)
+	b = sum(barr)/len(barr)
+	c = sum(carr)/len(carr)
+	
+	vola=min(0, int(10-a/maxdist*10))
+	volb=min(0, int(10-b/maxdist*10))
+	volc=min(0, int(10-c/maxdist*10));	
+	
+	cur_vol = [vola, volb, volc]
+
+	
+	print >>sys.stderr, last_vol
+	return last_vol
+
 def calc_volumes(a,b,c):
 	
-#	maxdist=2201
+	lowRef=1.5
+	hiRef=7.7
+	max_vol = 10
+	min_val = min(a,min(b,c))
+	if(min_val < lowRef):
+		a_vol = b_vol = c_vol = 0;
+		if(a == min_val):
+			a_vol = max_vol;
+			
+		if(b == min_val):
+			b_vol = max_vol;
+			
+		if(c == min_val):
+			c_vol = max_vol;
+			
+		cur_vol = [a_vol, b_vol, c_vol]
+		return cur_vol
+	
+	if(a > hiRef):
+		a_vol = 0;
+	
+	if(b > hiRef):
+		b_vol = 0;
+	
+	if(c > hiRef):
+		c_vol = 0;
+	
 	maxdist=10
-	#max(max(a,b),c)
+
 	
 	vola=int(10-a/maxdist*10);
 	volb=int(10-b/maxdist*10);
