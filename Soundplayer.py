@@ -29,15 +29,17 @@ def calc_distance(x,y):
 
 def calc_volumes(a,b,c):
 	
-	maxdist=2201
-    #max(max(a,b),c)
+#	maxdist=2201
+	maxdist=10
+	#max(max(a,b),c)
 	
 	vola=int(10-a/maxdist*10);
 	volb=int(10-b/maxdist*10);
 	volc=int(10-c/maxdist*10);
 	
-	arr = [vola,volb,volc]
 	
+	arr = [vola,volb,volc]
+	print >>sys.stderr, arr
 	return arr
 
 
@@ -84,6 +86,9 @@ def main():
 		# Receive the data in small chunks and retransmit it
 			while True:
 				data = connection.recv(64)
+				#data.decode("text")
+				print type(data)
+				data=data[2:]
 				print >>sys.stderr, 'received "%s"' % data
 				if data:
 					#print >>sys.stderr, 'sending data back to the client'
@@ -94,11 +99,12 @@ def main():
 					d=float(xy[3])
 					#volumes = calc_distance(float(x),float(y))
 					volumes = calc_volumes(a,b,c)
-					set_volume(players,volumes)
+					#set_volume(players,volumes)
 					print volumes[0],volumes[1],volumes[2]
 					#connection.sendall(data)
 				else:
 					print >>sys.stderr, 'no more data from', client_address
+					time.sleep(1)
 					#break
 		finally:
 		# Clean up the connection
