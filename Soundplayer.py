@@ -74,6 +74,7 @@ def calc_volumes(a,b,c):
 			c_vol = max_vol;
 			
 		cur_vol = [a_vol, b_vol, c_vol]
+		print >>sys.stderr, cur_vol
 		return cur_vol
 	
 	if(a > hiRef):
@@ -101,6 +102,8 @@ def calc_volumes(a,b,c):
 
 def set_volume(players,volumes):
 	for i in range(0,len(players)):
+		if volumes[i]>7:
+			volumes[i]=7
 		players[i].set_property('volume',volumes[i])
 
 def create_player(fname):
@@ -154,7 +157,7 @@ def main():
 					d=float(xy[3])
 					#volumes = calc_distance(float(x),float(y))
 					volumes = calc_volumes(a,b,c)
-					#set_volume(players,volumes)
+					set_volume(players,volumes)
 					print volumes[0],volumes[1],volumes[2]
 					#connection.sendall(data)
 				else:
