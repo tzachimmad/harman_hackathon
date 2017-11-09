@@ -27,6 +27,20 @@ def calc_distance(x,y):
 			arr[i]=0
 	return arr
 
+def calc_volumes(a,b,c):
+	
+	maxdist=2201
+    #max(max(a,b),c)
+	
+	vola=int(10-a/maxdist*10);
+	volb=int(10-b/maxdist*10);
+	volc=int(10-c/maxdist*10);
+	
+	arr = [vola,volb,volc]
+	
+	return arr
+
+
 
 def set_volume(players,volumes):
 	for i in range(0,len(players)):
@@ -48,7 +62,9 @@ def main():
 	sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 
 	# Bind the socket to the port
-	server_address = ('localhost', 10000)
+	server_address = ('0.0.0.0', 10000)
+#	server_address = ('localhost', 10000)
+
 	print >>sys.stderr, 'starting up on %s port %s' % server_address
 	sock.bind(server_address)
 
@@ -67,20 +83,23 @@ def main():
 			
 		# Receive the data in small chunks and retransmit it
 			while True:
-				data = connection.recv(16)
+				data = connection.recv(64)
 				print >>sys.stderr, 'received "%s"' % data
 				if data:
 					#print >>sys.stderr, 'sending data back to the client'
 					xy=data.split(',');
-					x=float(xy[0])
-					y=float(xy[1])
-					volumes = calc_distance(float(x),float(y))
+					a=float(xy[0])
+					b=float(xy[1])
+					c=float(xy[2])
+					d=float(xy[3])
+					#volumes = calc_distance(float(x),float(y))
+					volumes = calc_volumes(a,b,c)
 					set_volume(players,volumes)
 					print volumes[0],volumes[1],volumes[2]
-					connection.sendall(data)
+					#connection.sendall(data)
 				else:
 					print >>sys.stderr, 'no more data from', client_address
-					break
+					#break
 		finally:
 		# Clean up the connection
 			connection.close()
