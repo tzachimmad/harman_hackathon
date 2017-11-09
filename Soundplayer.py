@@ -3,16 +3,12 @@ import pygst
 pygst.require('0.10')
 import gst
 import sys
-from Xlib import display
 import time
+import socket
+import sys
 
 LEFT = 1919.0
 BOTTOM =1079.0
-
-def mousepos():
-	"""mousepos() --> (x, y) get the mouse coordinates on the screen (linux, Xlib)."""
-	data = display.Display().screen().root.query_pointer()._data
-	return data["root_x"], data["root_y"]
 
 def calc_distance(x,y):
 	prog = 2201/10
@@ -47,17 +43,47 @@ def main():
 		players.append(create_player(str(sys.argv[i])) )
 	for pl in players:
 		pl.set_state(gst.STATE_PLAYING)
-	while (True):
-		time.sleep(0.2)
-		x,y = mousepos()
-		volumes = calc_distance(float(x),float(y))
-		set_volume(players,volumes)
-		print volumes[0],volumes[1],volumes[2]
+	
+	# Create a TCP/IP socket
+	sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+
+	# Bind the socket to the port
+	server_address = ('localhost', 10000)
+	print >>sys.stderr, 'starting up on %s port %s' % server_address
+	sock.bind(server_address)
+
+	#Listen for incoming connections
+	sock.listen(1)
+	
+	# Wait for a connection
+	print >>sys.stderr, 'waiting for a connection'
+	connection, client_address = sock.accept()
+
+	while True:
+		
+	 
+		try:
+			print >>sys.stderr, 'connection from', client_address
+			
+		# Receive the data in small chunks and retransmit it
+			while True:
+				data = connection.recv(16)
+				print >>sys.stderr, 'received "%s"' % data
+				if data:
+					#print >>sys.stderr, 'sending data back to the client'
+					xy=data.split(',');
+					x=float(xy[0])
+					y=float(xy[1])
+					volumes = calc_distance(float(x),float(y))
+					set_volume(players,volumes)
+					print volumes[0],volumes[1],volumes[2]
+					connection.sendall(data)
+				else:
+					print >>sys.stderr, 'no more data from', client_address
+					break
+		finally:
+		# Clean up the connection
+			connection.close()
+			break
 
 main()
-##if __name__ == "__main__":
-   ## try:
-  ##	  main()
-  ##  except:
-   ##	 print "Error occured"
-   ##	 sys.exit(1)
