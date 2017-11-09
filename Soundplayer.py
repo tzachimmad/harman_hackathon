@@ -19,12 +19,10 @@ def calc_distance(x,y):
 	volume_a= int((x**2 + y**2)**0.5)
 	volume_b =  int(((LEFT-x)**2 + y**2)**0.5)
 	volume_c = int((x**2 + (BOTTOM-y)**2)**0.5)
-	volume_d =  int(((LEFT-x)**2 + (BOTTOM-y)**2)**0.5)
 	volume_a = 10-int(volume_a/prog)
 	volume_b = 10-int(volume_b/prog)
 	volume_c = 10-int(volume_c/prog)
-	volume_d = 10-int(volume_d/prog)
-	arr = [volume_a,volume_b,volume_c,volume_d]
+	arr = [volume_a,volume_b,volume_c]
 	max_num = max(arr)
 	for i in range(0,len(arr)):
 		if arr[i]!=max_num:
@@ -54,7 +52,7 @@ def main():
 		x,y = mousepos()
 		volumes = calc_distance(float(x),float(y))
 		set_volume(players,volumes)
-		print volumes[0],volumes[1],volumes[2],volumes[3]
+		print volumes[0],volumes[1],volumes[2]
 
 main()
 ##if __name__ == "__main__":
